@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import stats
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
@@ -96,5 +97,25 @@ plt.plot([y_test.min(), y_test.max()],
 plt.title('Giá trị thực tế vs Giá trị dự đoán')
 plt.xlabel('Annual Return thực tế')
 plt.ylabel('Annual Return dự đoán')
+plt.grid(True)
+plt.show()
+
+#Vẽ biểu đồ QQ-plot
+all_residuals = []
+all_fitted = []
+residuals = y_test - y_pred
+all_residuals.extend(residuals)
+all_fitted.extend(y_pred)
+stats.probplot(all_residuals, dist="norm", plot=plt)
+plt.title("QQ Plot of Residuals (K-fold CV)")
+plt.show()
+
+#Vẽ biểu đồ phần dư
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x=all_fitted, y=all_residuals)
+plt.axhline(y=0, color='r', linestyle='--')
+plt.title('Residual Plot')
+plt.xlabel('Giá trị dự đoán')
+plt.ylabel('Phần dư')
 plt.grid(True)
 plt.show()
